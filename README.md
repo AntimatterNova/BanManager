@@ -11,7 +11,7 @@
 
 <a name='description'></a>
 ## Program Description
-A program developed by AntimatterNova with assistanc from ChatGPT for use by the you.are.a.hitman organization.
+A program developed by AntimatterNova with assistanc from ChatGPT for use by the you.are.a.hitman organization for tracking banned accounts and checking the ban status of reported accounts.
 
 <a name='usage'></a>
 ## Usage
