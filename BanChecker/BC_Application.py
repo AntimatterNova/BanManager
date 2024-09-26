@@ -97,6 +97,13 @@ def view_usernames():
 def update_total_label(count):
     total_label.config(text=f"Total Usernames: {count}")
 
+def alphabetize_usernames():
+    usernames = load_usernames()
+    usernames.sort()  # Sort the usernames alphabetically
+    save_usernames(usernames)  # Save the sorted list back to the file
+    view_usernames()  # Refresh the Listbox to display the sorted usernames
+    messagebox.showinfo("Success", "Usernames alphabetized successfully.")
+
 # Set up the GUI
 root = tk.Tk()
 root.title("Ban Tracker")
@@ -116,19 +123,22 @@ entry.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
 # Buttons for checking status, adding, and searching usernames
 button_frame = tk.Frame(root, bg="gray")
 button_frame.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
-button_frame.grid_columnconfigure([0, 1, 2, 3], weight=1)  # Allow buttons to expand
+button_frame.grid_columnconfigure([0, 1, 2, 3, 4], weight=1)  # Allow buttons to expand
 
 check_button = tk.Button(button_frame, text="Check Status", command=check_account, bg="darkblue", fg="white")
 check_button.grid(row=0, column=0, padx=5, sticky="ew")
 
-add_button = tk.Button(button_frame, text="Add Username", command=lambda: add_username(entry.get()), bg="green", fg="white")
-add_button.grid(row=0, column=1, padx=5, sticky="ew")
-
 search_button = tk.Button(button_frame, text="Search Username", command=search_username, bg="orange", fg="white")
-search_button.grid(row=0, column=2, padx=5, sticky="ew")
+search_button.grid(row=0, column=1, padx=5, sticky="ew")
+
+add_button = tk.Button(button_frame, text="Add Username", command=lambda: add_username(entry.get()), bg="green", fg="white")
+add_button.grid(row=0, column=2, padx=5, sticky="ew")
 
 remove_button = tk.Button(button_frame, text="Remove Username", command=lambda: remove_username(entry.get()), bg="darkred", fg="white")
 remove_button.grid(row=0, column=3, padx=5, sticky="ew")
+
+alphabetize_button = tk.Button(button_frame, text="Alphabetize List", command=alphabetize_usernames, bg="purple", fg="white")
+alphabetize_button.grid(row=0, column=4, padx=5, sticky="ew")
 
 # Result label for account status check
 progress_label = tk.Label(root, text="", font=("Helvetica", 12), bg="gray", fg="yellow")
