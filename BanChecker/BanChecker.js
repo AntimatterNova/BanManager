@@ -9,7 +9,7 @@ async function checkInstagramAccountStatus(username) {
       waitUntil: "networkidle2",
     });
 
-    await page.waitForSelector("span.x1lliihq", { timeout: 7000 });
+    await page.waitForSelector("span.x1lliihq", { timeout: 3000 });
 
     const status = await page.evaluate(() => {
       const accountStat = document.querySelector("span.x1lliihq");
