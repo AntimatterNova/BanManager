@@ -103,59 +103,60 @@ root.title("Ban Tracker")
 root.geometry("800x600")
 root.configure(bg="gray")
 
-# Create a frame for central alignment
-frame = tk.Frame(root, bg="gray")
-frame.pack(expand=True, fill=tk.BOTH)
-
-# Configure grid weights for responsive resizing
-frame.grid_rowconfigure(0, weight=1)
-frame.grid_rowconfigure(1, weight=1)
-frame.grid_rowconfigure(2, weight=1)
-frame.grid_columnconfigure(0, weight=1)
+# Configure grid weights to make widgets expand with window resize
+root.grid_columnconfigure(0, weight=1)
+root.grid_rowconfigure(1, weight=1)  # For the Listbox to expand
+root.grid_rowconfigure(2, weight=0)
+root.grid_rowconfigure(3, weight=0)
 
 # Combined input field for account status check and database operations
-entry = tk.Entry(frame, width=30, bg="lightgray")
-entry.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
+entry = tk.Entry(root, width=30, bg="lightgray")
+entry.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
 
 # Buttons for checking status, adding, and searching usernames
-button_frame = tk.Frame(frame, bg="gray")
-button_frame.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+button_frame = tk.Frame(root, bg="gray")
+button_frame.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+button_frame.grid_columnconfigure([0, 1, 2, 3], weight=1)  # Allow buttons to expand
 
 check_button = tk.Button(button_frame, text="Check Status", command=check_account, bg="darkblue", fg="white")
-check_button.pack(side=tk.LEFT, padx=5)
-
-search_button = tk.Button(button_frame, text="Search Username", command=search_username, bg="darkorange", fg="white")
-search_button.pack(side=tk.LEFT, padx=5)
+check_button.grid(row=0, column=0, padx=5, sticky="ew")
 
 add_button = tk.Button(button_frame, text="Add Username", command=lambda: add_username(entry.get()), bg="green", fg="white")
-add_button.pack(side=tk.LEFT, padx=5)
+add_button.grid(row=0, column=1, padx=5, sticky="ew")
+
+search_button = tk.Button(button_frame, text="Search Username", command=search_username, bg="orange", fg="white")
+search_button.grid(row=0, column=2, padx=5, sticky="ew")
 
 remove_button = tk.Button(button_frame, text="Remove Username", command=lambda: remove_username(entry.get()), bg="darkred", fg="white")
-remove_button.pack(side=tk.LEFT, padx=5)
+remove_button.grid(row=0, column=3, padx=5, sticky="ew")
 
 # Result label for account status check
-progress_label = tk.Label(frame, text="", font=("Helvetica", 12), bg="gray", fg="yellow")
+progress_label = tk.Label(root, text="", font=("Helvetica", 12), bg="gray", fg="yellow")
 progress_label.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
 
-result_label = tk.Label(frame, text="", font=("Helvetica", 12), bg="gray", fg="white")
+result_label = tk.Label(root, text="", font=("Helvetica", 12), bg="gray", fg="white")
 result_label.grid(row=3, column=0, padx=10, pady=5, sticky="ew")
-
-# Label to display total usernames
-total_label = tk.Label(root, text="Total Usernames: 0", bg="gray", fg="white")
-total_label.pack(padx=10, pady=5, fill=tk.X)
 
 # Frame for Listbox and Scrollbar
 list_frame = tk.Frame(root)
-list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+list_frame.grid(row=4, column=0, padx=10, pady=10, sticky="nsew")
+
+# Configure the listbox to resize with the window
+list_frame.grid_columnconfigure(0, weight=1)
+list_frame.grid_rowconfigure(0, weight=1)
 
 user_list = tk.Listbox(list_frame, height=10, width=50, bg="lightgray", fg="black")
-user_list.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+user_list.grid(row=0, column=0, sticky="nsew")
 
 scrollbar = tk.Scrollbar(list_frame)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+scrollbar.grid(row=0, column=1, sticky="ns")
 
 user_list.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=user_list.yview)
+
+# Label to display total usernames
+total_label = tk.Label(root, text="Total Usernames: 0", bg="gray", fg="white")
+total_label.grid(row=5, column=0, padx=10, pady=5, sticky="ew")
 
 # Initialize by displaying any existing usernames
 view_usernames()
