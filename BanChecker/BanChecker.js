@@ -1,8 +1,20 @@
 import puppeteer from "puppeteer";
 
 async function checkInstagramAccountStatus(username) {
-  const browser = await puppeteer.launch({ headless: true });
+  // Launch browser with custom window size
+  const browser = await puppeteer.launch({
+    headless: false, // Set to 'false' to see the browser window, or 'true' for headless mode
+    args: ['--window-size=500,400'], // Set window size to 800x600
+    defaultViewport: null // Disable viewport restrictions so it matches the window size
+  });
+
   const page = await browser.newPage();
+
+  // Optionally, you can set the viewport to match the window size
+  await page.setViewport({
+    width: 400,
+    height: 300,
+  });
 
   try {
     await page.goto(`https://www.instagram.com/${username}/`, {

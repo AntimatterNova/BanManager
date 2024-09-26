@@ -19,6 +19,16 @@ def check_account_status(username):
         print("Error:", e.stderr)
         return "Error checking account status."
 
+# Function to toggle automatic adding of banned accounts
+def toggle_auto_add():
+    if auto_add_banned.get():
+        auto_add_checkbox.config(bg="blue")  # Change background to blue when checked
+        messagebox.showinfo("Auto Add", "Banned accounts will be added automatically after status check.")
+    else:
+        auto_add_checkbox.config(bg="gray")  # Change background back to gray when unchecked
+        messagebox.showinfo("Auto Add", "Auto-add for banned accounts is disabled.")
+
+# Updated account status checker function to handle automatic adding of banned accounts
 def check_account():
     username = entry.get()
     if username:
@@ -36,13 +46,15 @@ def check_account():
         
         if banned_count > 0:
             result_label.config(text="The account is either banned or does not exist.", fg="red")
+            # Check if toggle is enabled, and automatically add the banned account
+            if auto_add_banned.get():
+                add_username(username)
         else:
             result_label.config(text="The account is active.", fg="lightgreen")
 
         progress_label.config(text="Status check complete.")
     else:
         result_label.config(text="Please enter an Instagram username.", fg="black")
-
 # Database functions
 file_path = "usernames.txt"
 
@@ -136,6 +148,8 @@ root.title("Ban Tracker")
 root.geometry("1000x800")
 root.configure(bg="gray")
 
+auto_add_banned = tk.BooleanVar()
+
 # Configure grid weights to make widgets expand with window resize
 root.grid_columnconfigure(0, weight=1)
 root.grid_rowconfigure(1, weight=1)  # For the Listbox to expand
@@ -201,6 +215,20 @@ scrollbar.grid(row=0, column=1, sticky="ns")
 
 user_list.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=user_list.yview)
+
+# Add a Checkbutton (toggle switch) for auto-adding banned accounts
+auto_add_checkbox = tk.Checkbutton(
+    root, 
+    text="Banned Account Auto-Add", 
+    variable=auto_add_banned, 
+    onvalue=True, 
+    offvalue=False, 
+    command=toggle_auto_add, 
+    font=("Helvetica", 12), 
+    bg="gray", 
+    fg="white"
+)
+auto_add_checkbox.grid(row=6, column=0, padx=10, pady=10, sticky="w")
 
 # Initialize by displaying any existing usernames
 view_usernames()
